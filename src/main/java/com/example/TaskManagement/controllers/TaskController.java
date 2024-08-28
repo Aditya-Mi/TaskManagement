@@ -26,7 +26,7 @@ public class TaskController {
     @PostMapping("/tasks")
     public ResponseEntity<Task> createTask(@RequestBody Task task, HttpServletRequest request) throws UserNotFoundException {
         log.info("Creating new task: {}", task);
-        return ResponseEntity.ok().body(taskService.saveTask(task,request));
+        return ResponseEntity.ok().body(taskService.saveTask(task, request));
     }
 
     @PutMapping("/tasks")

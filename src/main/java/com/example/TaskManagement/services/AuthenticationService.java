@@ -43,6 +43,10 @@ public class AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(request.getUsername()));
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse
+                .builder()
+                .token(jwtToken)
+                .expiresIn(jwtService.getExpirationTime())
+                .build();
     }
 }
