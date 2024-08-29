@@ -1,5 +1,6 @@
 package com.example.TaskManagement.models.task;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,8 @@ public class TaskUpdateRequest {
     private String title;
     private String description;
     private Integer priority;
-    private Boolean done;  // Use Boolean to allow null for optional updates
+    private Boolean done;// Use Boolean to allow null for optional updates
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dueDate;
 }
 

@@ -1,5 +1,6 @@
 package com.example.TaskManagement.models.task;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -29,6 +30,6 @@ public class TaskCreateRequest {
     private Integer priority;
 
     private boolean done;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dueDate;
 }
