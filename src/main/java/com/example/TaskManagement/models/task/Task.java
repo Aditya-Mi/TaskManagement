@@ -1,4 +1,4 @@
-package com.example.TaskManagement.models;
+package com.example.TaskManagement.models.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

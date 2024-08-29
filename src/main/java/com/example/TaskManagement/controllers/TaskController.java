@@ -1,9 +1,14 @@
 package com.example.TaskManagement.controllers;
 
 import com.example.TaskManagement.UserNotFoundException;
-import com.example.TaskManagement.models.Task;
+import com.example.TaskManagement.exception.ResourceNotFoundException;
+import com.example.TaskManagement.models.task.Task;
+import com.example.TaskManagement.models.task.TaskCreateRequest;
+import com.example.TaskManagement.models.task.TaskUpdateRequest;
 import com.example.TaskManagement.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +28,25 @@ public class TaskController {
         return ResponseEntity.ok().body(taskService.getAllTasks(request));
     }
 
+    @GetMapping("tasks/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable @Positive(message = "Task ID must be a positive number") int id, HttpServletRequest request) throws UserNotFoundException, ResourceNotFoundException {
+        return ResponseEntity.ok().body(taskService.getTaskById(id, request));
+    }
+
     @PostMapping("/tasks")
-    public ResponseEntity<Task> createTask(@RequestBody Task task, HttpServletRequest request) throws UserNotFoundException {
+    public ResponseEntity<Task> createTask(@Valid @RequestBody TaskCreateRequest task, HttpServletRequest request) throws UserNotFoundException {
         log.info("Creating new task: {}", task);
         return ResponseEntity.ok().body(taskService.saveTask(task, request));
     }
 
     @PutMapping("/tasks")
-    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
-        return ResponseEntity.ok().body(taskService.updateTask(task));
+    public ResponseEntity<Task> updateTask(@Valid @RequestBody TaskUpdateRequest task, HttpServletRequest request) throws UserNotFoundException, ResourceNotFoundException {
+        return ResponseEntity.ok().body(taskService.updateTask(task, request));
     }
 
     @DeleteMapping("/tasks/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable int id) {
-        taskService.deleteTask(id);
-        return ResponseEntity.ok().body("Deleted Task");
+    public ResponseEntity<String> deleteTask(@PathVariable @Positive(message = "Task ID must be a positive number") int id, HttpServletRequest request) throws UserNotFoundException, ResourceNotFoundException {
+        taskService.deleteTask(id, request);
+        return ResponseEntity.ok().body("Task deleted successfully.");
     }
 }
