@@ -23,6 +23,7 @@ public class Task {
     private String description;
     private int priority;
     private boolean done;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dueDate;
 
     private Integer userId;

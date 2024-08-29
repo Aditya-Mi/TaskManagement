@@ -10,6 +10,7 @@ services:
       - "8080:8080"
     environment:
       DB_URL_EXTERNAL: ${DB_URL_EXTERNAL}
+      DB_URL_INTERNAL: ${DB_URL_INTERNAL}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DRIVER: ${DB_DRIVER}
@@ -30,3 +31,4 @@ services:
 
 volumes:
   pgdata:
+    external: false

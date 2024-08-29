@@ -24,6 +24,7 @@ public class TaskUpdateRequest {
     private String description;
     private Integer priority;
     private Boolean done;// Use Boolean to allow null for optional updates
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dueDate;
 }
