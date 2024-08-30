@@ -31,4 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+docker-compose.override.yml
 
+src/main/resources/application-dev.properties

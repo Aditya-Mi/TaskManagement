@@ -2,13 +2,11 @@ package com.example.TaskManagement.exception;
 
 import lombok.*;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-
+@ToString
 public class ApiError {
     private final HttpStatus status;
     private final String message;
