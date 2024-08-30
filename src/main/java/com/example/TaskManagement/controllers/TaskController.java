@@ -8,10 +8,13 @@ import com.example.TaskManagement.models.task.TaskUpdateRequest;
 import com.example.TaskManagement.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1")
+@Validated
 public class TaskController {
     private final TaskService taskService;
 
@@ -35,7 +39,6 @@ public class TaskController {
 
     @PostMapping("/tasks")
     public ResponseEntity<Task> createTask(@Valid @RequestBody TaskCreateRequest task, HttpServletRequest request) throws UserNotFoundException {
-        log.info("Creating new task: {}", task);
         return ResponseEntity.ok().body(taskService.saveTask(task, request));
     }
 
@@ -45,7 +48,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/tasks/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable @Positive(message = "Task ID must be a positive number") int id, HttpServletRequest request) throws UserNotFoundException, ResourceNotFoundException {
+    public ResponseEntity<String> deleteTask(@PathVariable @NotNull @Positive(message = "Task ID must be a positive number") int id, HttpServletRequest request) throws UserNotFoundException, ResourceNotFoundException {
         taskService.deleteTask(id, request);
         return ResponseEntity.ok().body("Task deleted successfully.");
     }

@@ -2,8 +2,6 @@ package com.example.TaskManagement.exception;
 
 
 import com.example.TaskManagement.UserNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +19,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ApiError> handleResourceNotFoundException(ResponseStatusException ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), "Resource not found");
@@ -37,12 +33,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        log.info("Handle validation exception");
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.toList());
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Validation failed", errors);
-        logger.error(apiError.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
 
@@ -54,8 +48,32 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-public ResponseEntity<ApiError> handleUserNotFoundException(UserNotFoundException ex) {
+    public ResponseEntity<ApiError> handleUserNotFoundException(UserNotFoundException ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), "User not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+    }
+
+    @ExceptionHandler(DatabaseOperationException.class)
+    public ResponseEntity<ApiError> handleDatabaseOperationException(DatabaseOperationException ex) {
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Database operation failed", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+        ApiError apiError = new ApiError(HttpStatus.CONFLICT, "User already exists", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiError);
+    }
+
+    @ExceptionHandler(RegistrationFailedException.class)
+    public ResponseEntity<ApiError> handleRegistrationFailedException(RegistrationFailedException ex) {
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Registration failed", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
+    }
+
+    @ExceptionHandler(TaskOperationException.class)
+    public ResponseEntity<ApiError> handleTaskOperationException(TaskOperationException ex) {
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Task operation failed", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
     }
 }
