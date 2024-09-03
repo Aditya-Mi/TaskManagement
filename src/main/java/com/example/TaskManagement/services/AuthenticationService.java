@@ -8,6 +8,7 @@ import com.example.TaskManagement.models.auth.*;
 import com.example.TaskManagement.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -41,6 +43,7 @@ public class AuthenticationService {
         } catch (DataAccessException e){
             throw new DatabaseOperationException("Error occurred while saving user", e);
         } catch (Exception e) {
+            log.error("An unexpected error occurred during registration", e);
             throw new RegistrationFailedException("An unexpected error occurred during registration", e);
         }
 
