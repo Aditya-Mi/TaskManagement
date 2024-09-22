@@ -40,13 +40,14 @@ public class AuthenticationService {
             return AuthenticationResponse.builder()
                     .token(jwtToken)
                     .build();
+        }catch (UserAlreadyExistsException e) {
+            throw e;
         } catch (DataAccessException e){
             throw new DatabaseOperationException("Error occurred while saving user", e);
         } catch (Exception e) {
             log.error("An unexpected error occurred during registration", e);
             throw new RegistrationFailedException("An unexpected error occurred during registration", e);
         }
-
     }
 
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -65,6 +66,8 @@ public class AuthenticationService {
                     .token(jwtToken)
                     .expiresIn(jwtService.getExpirationTime())
                     .build();
+        } catch (UsernameNotFoundException e) {
+            throw e;
         } catch (DataAccessException e){
             throw new DatabaseOperationException("Error occurred while fetching user", e);
         } catch (Exception e) {
